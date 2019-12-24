@@ -1,0 +1,113 @@
+package com.cp.dd.common.util.security;
+
+import com.cp.dd.common.util.Exceptions;
+import org.apache.commons.lang3.StringUtils;
+
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+/**
+ * 加密相关工具类直接使用Spring util封装，减少jar依赖
+ *
+ * @author zouxq
+ */
+public class DigestUtil extends org.springframework.util.DigestUtils {
+
+    /**
+     * Calculates the MD5 digest and returns the value as a 32 character hex string.
+     *
+     * @param data Data to digest
+     * @return MD5 digest as a hex string
+     */
+    public static String md5Hex(final String data) {
+        return DigestUtil.md5DigestAsHex(data.getBytes(StandardCharsets.UTF_8));
+    }
+
+    /**
+     * Return a hexadecimal string representation of the MD5 digest of the given bytes.
+     *
+     * @param bytes the bytes to calculate the digest over
+     * @return a hexadecimal digest string
+     */
+    public static String md5Hex(final byte[] bytes) {
+        return DigestUtil.md5DigestAsHex(bytes);
+    }
+
+    private static final char[] HEX_DIGITS = "0123456789abcdef".toCharArray();
+
+    public static String sha1(String srcStr) {
+        return hash("SHA-1", srcStr);
+    }
+
+    public static String sha256(String srcStr) {
+        return hash("SHA-256", srcStr);
+    }
+
+    public static String sha384(String srcStr) {
+        return hash("SHA-384", srcStr);
+    }
+
+    public static String sha512(String srcStr) {
+        return hash("SHA-512", srcStr);
+    }
+
+    public static String hash(String algorithm, String srcStr) {
+        try {
+            MessageDigest md = MessageDigest.getInstance(algorithm);
+            byte[] bytes = md.digest(srcStr.getBytes(StandardCharsets.UTF_8));
+            return toHex(bytes);
+        } catch (NoSuchAlgorithmException e) {
+            throw Exceptions.unchecked(e);
+        }
+    }
+
+    public static String toHex(byte[] bytes) {
+        StringBuilder ret = new StringBuilder(bytes.length * 2);
+        for (byte aByte : bytes) {
+            ret.append(HEX_DIGITS[(aByte >> 4) & 0x0f]);
+            ret.append(HEX_DIGITS[aByte & 0x0f]);
+        }
+        return ret.toString();
+    }
+
+    public static boolean slowEquals(String a, String b) {
+        if (a == null || b == null) {
+            return false;
+        }
+        return slowEquals(a.getBytes(StandardCharsets.UTF_8), b.getBytes(StandardCharsets.UTF_8));
+    }
+
+    public static boolean slowEquals(byte[] a, byte[] b) {
+        if (a == null || b == null) {
+            return false;
+        }
+        if (a.length != b.length) {
+            return false;
+        }
+        int diff = a.length ^ b.length;
+        for (int i = 0; i < a.length; i++) {
+            diff |= a[i] ^ b[i];
+        }
+        return diff == 0;
+    }
+
+    /**
+     * 自定义加密 先MD5再SHA1
+     *
+     * @param data 数据
+     * @return String
+     */
+    public static String encrypt(String data) {
+        if (StringUtils.isBlank(data)) {
+            return "";
+        }
+        return sha1(md5Hex(data));
+    }
+
+
+    public static void main(String[] args) {
+        System.out.println(encrypt("123456"));
+    }
+}
+

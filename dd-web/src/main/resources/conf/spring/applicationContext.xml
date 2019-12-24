@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <!-- 定义受环境影响易变的变量 -->
+    <context:property-placeholder location="classpath*:*.properties"/>
+
+    <!-- 启动组件扫描 将Controller的注解排除掉，在spring-mvc.xml单独扫描Controller注解 -->
+    <context:component-scan base-package="com.eshore.zswh">
+        <context:exclude-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
+    </context:component-scan>
+
+    <aop:aspectj-autoproxy/>
+
+    <!-- data source druid 数据库连接池 -->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <!-- 基本属性 -->
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+        <property name="driverClassName" value="${jdbc.driverClassName}"/>
+        <!-- 配置初始化大小、最小、最大 -->
+        <property name="initialSize" value="${initialSize}"/>
+        <property name="minIdle" value="${minIdle}"/>
+        <property name="maxActive" value="${maxActive}"/>
+        <!-- 配置获取连接等待超时的时间 -->
+        <property name="maxWait" value="${maxWait}"/>
+        <!-- 配置了maxWait之后，缺省启用公平锁，并发效率会有所下降，如果需要可以通过配置useUnfairLock属性为true使用非公平锁。 -->
+        <property name="useUnfairLock" value="true"/>
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="${timeBetweenEvictionRunsMillis}"/>
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="${minEvictableIdleTimeMillis}"/>
+        <property name="validationQuery" value="${validationQuery}"/>
+        <property name="testWhileIdle" value="${testWhileIdle}"/>
+        <property name="testOnBorrow" value="${testOnBorrow}"/>
+        <property name="testOnReturn" value="${testOnReturn}"/>
+        <!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
+        <property name="poolPreparedStatements" value="true"/>
+        <property name="maxPoolPreparedStatementPerConnectionSize" value="${maxOpenPreparedStatements}"/>
+        <!-- 配置监控统计拦截的filters -->
+        <property name="filters" value="${filters}"/>
+        <!-- 打开removeAbandoned功能 -->
+        <property name="removeAbandoned" value="${removeAbandoned}"/>
+        <!-- 1800秒，也就是30分钟 -->
+        <property name="removeAbandonedTimeout" value="${removeAbandonedTimeout}"/>
+        <property name="logAbandoned" value="${logAbandoned}"/>
+    </bean>
+
+    <!--========== MyBatis 配置 ==============-->
+    <!-- 配置 MapperScan -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.eshore.zswh.common.mapper"/>
+    </bean>
+
+    <!-- 调整 SqlSessionFactory 为 MyBatis-Plus 的 SqlSessionFactory -->
+    <bean id="sqlSessionFactory" class="com.eshore.zswh.common.support.custom.CustomMybatisSqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="mapperLocations" value="classpath*:mapper/**/*.xml"/>
+        <property name="globalConfig" ref="globalConfig"/>
+        <property name="plugins">
+            <array>
+                <bean class="com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor"/>
+            </array>
+        </property>
+    </bean>
+
+    <bean id="globalConfig" class="com.baomidou.mybatisplus.core.config.GlobalConfig">
+        <property name="dbConfig">
+            <bean class="com.baomidou.mybatisplus.core.config.GlobalConfig.DbConfig">
+                <property name="idType" value="AUTO"/>
+            </bean>
+        </property>
+        <property name="metaObjectHandler">
+            <!-- 公共数据填充 -->
+            <bean class="com.eshore.zswh.web.handler.MyMetaObjectHandler"/>
+        </property>
+    </bean>
+
+    <!-- 事务管理 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <!-- 使用annotation定义事务 -->
+    <tx:annotation-driven proxy-target-class="true"/>
+
+    <!--========== 自定义要添加的组件 ==============-->
+    <!-- 加入tokenUtil组件 -->
+    <bean id="tokenUtil" class="com.eshore.zswh.common.util.sys.TokenUtil"/>
+    <!-- 加入sysSmsCaptchaUtil短信验证码组件 -->
+    <bean id="sysSmsCaptchaUtil" class="com.eshore.zswh.common.util.sys.SysSmsCaptchaUtil"/>
+    <!-- 加入sysSmsCaptchaUtil短信验证码组件 -->
+    <bean id="wechatLoginUtil" class="com.eshore.zswh.common.util.WechatLoginUtil"/>
+
+    <import resource="classpath:/conf/spring/applicationContext-redis.xml"/>
+</beans>

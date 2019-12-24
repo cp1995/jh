@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eshore.zswh.common.mapper.member.MemberMapper">
+
+	<select id="getOneById" resultType="com.eshore.zswh.common.entity.member.Member">
+		select *
+		from member
+		where 1=1 and id=#{id}
+	</select>
+
+	<select id="getMemberVoPage" resultType="com.eshore.zswh.common.vo.member.MemberVO">
+		SELECT * FROM member
+		<where>
+			<if test="idCard != null and idCard != '' ">
+				AND id_card like concat('%' ,#{idCard},'%')
+			</if>
+			<if test="name != null and name != ''">
+				AND name like concat('%' ,#{name},'%')
+			</if>
+			<if test="phone != null and phone != '' ">
+				AND phone like concat('%' ,#{phone},'%')
+			</if>
+			<if test="startTime != null">
+				AND create_time &gt;= #{startTime}
+			</if>
+			<if test="endTime != null">
+				AND create_time &lt;= #{endTime}
+			</if>
+			<if test="realVerify != null">
+				AND real_verify = #{realVerify}
+			</if>
+			<if test="enable != null">
+				AND enable = #{enable}
+			</if>
+			and  type =1
+		</where>
+		order by create_time desc
+
+	</select>
+
+	<select id="getMemberTeamAuditPage" resultType="com.eshore.zswh.common.vo.member.MemberTeamVO">
+		SELECT * FROM member
+		<where>
+			<if test="nickname != null and nickname != ''">
+				AND nickname like concat('%' ,#{nickname},'%')
+			</if>
+			<if test="startTime != null">
+				AND create_time &gt;= #{startTime}
+			</if>
+			<if test="endTime != null">
+				AND create_time &lt;= #{endTime}
+			</if>
+			<if test="teamType != null">
+				AND team_type = #{teamType}
+			</if>
+			<if test="auditStatus != null">
+				AND audit_status = #{auditStatus}
+			</if>
+			and type =2
+		</where>
+		order by create_time desc
+	</select>
+</mapper>

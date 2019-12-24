@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>index</title>
+    <style>
+        pre {
+            outline: 1px solid #ccc;
+            padding: 5px;
+            margin: 5px;
+        }
+
+        .string {
+            color: green;
+        }
+
+        .number {
+            color: darkorange;
+        }
+
+        .boolean {
+            color: blue;
+        }
+
+        .null {
+            color: magenta;
+        }
+
+        .key {
+            color: red;
+        }
+
+        .hedden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+账号：<input type="text" name="username" id="username"><br><br>
+密码：<input type="text" name="password" id="password"><br><br>
+用户类型：<select id="type" name="type">
+    <option value="1">个人用户</option>
+    <option value="2">团队用户</option>
+</select><br><br>
+用户来源：<select id="loginType" name="loginType">
+    <option value="1">web</option>
+    <option value="3">android</option>
+    <option value="4">ios</option>
+    <option value="5">小程序</option>
+</select><br><br>
+验证码：<input type="text" name="code" id="code">&nbsp;<img src="" onclick="changeImage()" id="image" alt="验证码"/>
+<br><br><br>
+验证码标识：<span id="sign_span"></span>
+<input type="hidden" name="sign" id="sign"><br><br>
+
+<input type="button" value="登录" onclick="login()"><br><br>
+
+<pre id="loginInfo" style="display: none"></pre>
+
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script src="https://cdn.staticfile.org/crypto-js/3.1.9-1/crypto-js.min.js"></script>
+<script>
+    window.onload = function () {
+        changeImage();
+    };
+
+    function changeImage() {
+        var sign = uuid();
+        document.getElementById("sign_span").innerHTML = sign;
+        document.getElementById("sign").value = sign;
+        document.getElementById("image").src = "/zswh-web-war/api/member/captcha.jpg?sign=" + sign;
+    }
+
+    function uuid() {
+        var s = [];
+        var hexDigits = "0123456789abcdef";
+        for (var i = 0; i < 36; i++) {
+            s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+        }
+        s[14] = "4";  // bits 12-15 of the time_hi_and_version field to 0010
+        s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);  // bits 6-7 of the clock_seq_hi_and_reserved to 01
+        s[8] = s[13] = s[18] = s[23] = "";// split by space
+        return s.join("");
+    }
+
+    function login() {
+        var data = {
+            username: $("#username").val(),
+            password: encrypt($("#password").val()),
+            type:$("#type").val(),
+            loginType:$("#loginType").val(),
+            sign: $("#sign").val(),
+            code: $("#code").val()
+        };
+        $('#loginInfo').hide();
+
+        $.ajax({
+            url: "/zswh-web-war/api/member/login",
+            data: data,
+            type: 'post',
+            dataType: "json",
+            success: function (resp) {
+                $('#loginInfo').html(syntaxHighlight(resp));
+            },
+            error: function (resp) {
+                var result = JSON.stringify(resp);
+                $('#loginInfo').html(result);
+            },
+            complete: function () {
+                $('#loginInfo').show();
+                changeImage();
+            }
+        });
+    }
+
+    function syntaxHighlight(json) {
+        if (typeof json != 'string') {
+            json = JSON.stringify(json, undefined, 2);
+        }
+        json = json.replace(/&/g, '&').replace(/</g, '<').replace(/>/g, '>');
+        return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+            var cls = 'number';
+            if (/^"/.test(match)) {
+                if (/:$/.test(match)) {
+                    cls = 'key';
+                } else {
+                    cls = 'string';
+                }
+            } else if (/true|false/.test(match)) {
+                cls = 'boolean';
+            } else if (/null/.test(match)) {
+                cls = 'null';
+            }
+            return '<span class="' + cls + '">' + match + '</span>';
+        });
+    }
+
+    /**
+     * AES加密 ：字符串 key iv  返回base64
+     */
+    function encrypt(word, keyStr, ivStr) {
+        // 默认的 KEY 与 iv 如果没有给
+        var key = CryptoJS.enc.Utf8.parse("zswh!@#$$#@!hwsz");
+        var iv = CryptoJS.enc.Utf8.parse('zswh!@#$$#@!hwsz');
+
+        if (keyStr) {
+            key = CryptoJS.enc.Utf8.parse(keyStr);
+            iv = CryptoJS.enc.Utf8.parse(ivStr);
+        }
+
+        var srcs = CryptoJS.enc.Utf8.parse(word);
+        var encrypted = CryptoJS.AES.encrypt(srcs, key, {
+            iv: iv,
+            mode: CryptoJS.mode.CBC,
+            padding: CryptoJS.pad.ZeroPadding
+        });
+        // console.log("-=-=-=-", encrypted.ciphertext)
+        return CryptoJS.enc.Base64.stringify(encrypted.ciphertext);
+
+    }
+</script>
+</body>
+</html>

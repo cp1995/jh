@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eshore.zswh.common.mapper.member.MemberCollectMapper">
+
+    <!-- 全量更新互动统计数据 （收藏、点赞、分享）-->
+    <update id="updateInteractionNumByType">
+        # 活动
+        update act_record a
+            left join (select obj_id, count(*) num
+                       FROM member_collect
+                       WHERE obj_type = 1
+                         and oper_type = #{operType}
+                         and update_time &lt;= #{currentTime}
+                         and state = 1
+                       GROUP BY obj_id) t on a.act_id = t.obj_id
+        set ${fieldName} = IFNULL(t.num, 0);
+
+        # 设施
+        update venue_record r
+            left join (select obj_id, count(*) num
+                       FROM member_collect
+                       WHERE obj_type = 2
+                         and oper_type = #{operType}
+                         and update_time &lt;= #{currentTime}
+                         and state = 1
+                       GROUP BY obj_id) t on r.obj_id = t.obj_id
+        set ${fieldName} = IFNULL(t.num, 0)
+        where r.obj_type = 1;
+
+        # 话题
+        update topic_act_stat s
+            left join (select obj_id, count(*) num
+                       FROM member_collect
+                       WHERE obj_type = 3
+                         and oper_type = #{operType}
+                         and update_time &lt;= #{currentTime}
+                         and state = 1
+                       GROUP BY obj_id) t on s.obj_id = t.obj_id
+        set ${fieldName} = IFNULL(t.num, 0)
+        where s.obj_type = 3;
+
+        # 你点我送
+        update topic_act_stat s
+            left join (select obj_id, count(*) num
+                       FROM member_collect
+                       WHERE obj_type = 4
+                         and oper_type = #{operType}
+                         and update_time &lt;= #{currentTime}
+                         and state = 1
+                       GROUP BY obj_id) t on s.obj_id = t.obj_id
+        set ${fieldName} = IFNULL(t.num, 0)
+        where s.obj_type = 1;
+
+        # 活动场室
+        update venue_record r
+            left join (select obj_id, count(*) num
+                       FROM member_collect
+                       WHERE obj_type = 5
+                         and oper_type = #{operType}
+                         and update_time &lt;= #{currentTime}
+                         and state = 1
+                       GROUP BY obj_id) t on r.obj_id = t.obj_id
+        set ${fieldName} = IFNULL(t.num, 0)
+        where r.obj_type = 2;
+
+        # 社团
+        update club_record r
+            left join (select obj_id, count(*) num
+                       FROM member_collect
+                       WHERE obj_type = 6
+                         and oper_type = #{operType}
+                         and update_time &lt;= #{currentTime}
+                         and state = 1
+                       GROUP BY obj_id) t on r.club_id = t.obj_id
+        set ${fieldName} = IFNULL(t.num, 0);
+
+        # 文化资讯
+        update topic_act_stat s
+            left join (select obj_id, count(*) num
+                       FROM member_collect
+                       WHERE obj_type = 7
+                         and oper_type = #{operType}
+                         and update_time &lt;= #{currentTime}
+                         and state = 1
+                       GROUP BY obj_id) t on s.obj_id = t.obj_id
+        set ${fieldName} = IFNULL(t.num, 0)
+        where s.obj_type = 4;
+
+        # 远程点播
+        update video_record r
+            left join (select obj_id, count(*) num
+                       FROM member_collect
+                       WHERE obj_type = 8
+                         and oper_type = #{operType}
+                         and update_time &lt;= #{currentTime}
+                         and state = 1
+                       GROUP BY obj_id) t on r.video_id = t.obj_id
+        set ${fieldName} = IFNULL(t.num, 0);
+
+        # 精品路线
+        update topic_act_stat s
+            left join (select obj_id, count(*) num
+                       FROM member_collect
+                       WHERE obj_type = 9
+                         and oper_type = #{operType}
+                         and update_time &lt;= #{currentTime}
+                         and state = 1
+                       GROUP BY obj_id) t on s.obj_id = t.obj_id
+        set ${fieldName} = IFNULL(t.num, 0)
+        where s.obj_type = 5;
+
+        # 文化旅游
+        update topic_act_stat s
+            left join (select obj_id, count(*) num
+                       FROM member_collect
+                       WHERE obj_type = 10
+                         and oper_type = #{operType}
+                         and update_time &lt;= #{currentTime}
+                         and state = 1
+                       GROUP BY obj_id) t on s.obj_id = t.obj_id
+        set ${fieldName} = IFNULL(t.num, 0)
+        where s.obj_type = 6;
+    </update>
+
+    <!-- 增量更新互动统计数据（收藏、点赞、分享） -->
+    <update id="increaseInteractionNumByType">
+        # 活动
+        update act_record a
+            inner join (select obj_id, sum(state) num
+                        FROM member_collect
+                        WHERE obj_type = 1
+                          and offset &lt;&gt; 0
+                          and oper_type = #{operType}
+                          and update_time &gt; #{startTime}
+                          and update_time &lt;= #{endTime}
+                        GROUP BY obj_id) t on a.act_id = t.obj_id
+        set ${fieldName} = ${fieldName} + t.num;
+
+        # 设施
+        update venue_record r
+            inner join (select obj_id, sum(state) num
+                        FROM member_collect
+                        WHERE obj_type = 2
+                          and offset &lt;&gt; 0
+                          and oper_type = #{operType}
+                          and update_time &gt; #{startTime}
+                          and update_time &lt;= #{endTime}
+                        GROUP BY obj_id) t on r.obj_id = t.obj_id
+        set ${fieldName} = ${fieldName} + t.num
+        where r.obj_type = 1;
+
+        # 话题
+        update topic_act_stat s
+            inner join (select obj_id, sum(state) num
+                        FROM member_collect
+                        WHERE obj_type = 3
+                          and offset &lt;&gt; 0
+                          and oper_type = #{operType}
+                          and update_time &gt; #{startTime}
+                          and update_time &lt;= #{endTime}
+                        GROUP BY obj_id) t on s.obj_id = t.obj_id
+        set ${fieldName} = ${fieldName} + t.num
+        where s.obj_type = 3;
+
+        # 你点我送
+        update topic_act_stat s
+            inner join (select obj_id, sum(state) num
+                        FROM member_collect
+                        WHERE obj_type = 4
+                          and offset &lt;&gt; 0
+                          and oper_type = #{operType}
+                          and update_time &gt; #{startTime}
+                          and update_time &lt;= #{endTime}
+                        GROUP BY obj_id) t on s.obj_id = t.obj_id
+        set ${fieldName} = ${fieldName} + t.num
+        where s.obj_type = 1;
+
+        # 活动场室
+        update venue_record r
+            inner join (select obj_id, sum(state) num
+                        FROM member_collect
+                        WHERE obj_type = 5
+                          and offset &lt;&gt; 0
+                          and oper_type = #{operType}
+                          and update_time &gt; #{startTime}
+                          and update_time &lt;= #{endTime}
+                        GROUP BY obj_id) t on r.obj_id = t.obj_id
+        set ${fieldName} = ${fieldName} + t.num
+        where r.obj_type = 2;
+
+        # 社团
+        update club_record r
+            inner join (select obj_id, sum(state) num
+                        FROM member_collect
+                        WHERE obj_type = 6
+                          and offset &lt;&gt; 0
+                          and oper_type = #{operType}
+                          and update_time &gt; #{startTime}
+                          and update_time &lt;= #{endTime}
+                        GROUP BY obj_id) t on r.club_id = t.obj_id
+        set ${fieldName} = ${fieldName} + t.num;
+
+        # 文化资讯
+        update topic_act_stat s
+            inner join (select obj_id, sum(state) num
+                        FROM member_collect
+                        WHERE obj_type = 7
+                          and offset &lt;&gt; 0
+                          and oper_type = #{operType}
+                          and update_time &gt; #{startTime}
+                          and update_time &lt;= #{endTime}
+                        GROUP BY obj_id) t on s.obj_id = t.obj_id
+        set ${fieldName} = ${fieldName} + t.num
+        where s.obj_type = 4;
+
+        # 远程点播
+        update video_record r
+            inner join (select obj_id, sum(state) num
+                        FROM member_collect
+                        WHERE obj_type = 8
+                          and offset &lt;&gt; 0
+                          and oper_type = #{operType}
+                          and update_time &gt; #{startTime}
+                          and update_time &lt;= #{endTime}
+                        GROUP BY obj_id) t on r.video_id = t.obj_id
+        set ${fieldName} = ${fieldName} + t.num;
+
+        # 精品路线
+        update topic_act_stat s
+            inner join (select obj_id, sum(state) num
+                        FROM member_collect
+                        WHERE obj_type = 9
+                          and offset &lt;&gt; 0
+                          and oper_type = #{operType}
+                          and update_time &gt; #{startTime}
+                          and update_time &lt;= #{endTime}
+                        GROUP BY obj_id) t on s.obj_id = t.obj_id
+        set ${fieldName} = ${fieldName} + t.num
+        where s.obj_type = 5;
+
+        # 文化旅游
+        update topic_act_stat s
+            inner join (select obj_id, sum(state) num
+                        FROM member_collect
+                        WHERE obj_type = 10
+                          and offset &lt;&gt; 0
+                          and oper_type = #{operType}
+                          and update_time &gt; #{startTime}
+                          and update_time &lt;= #{endTime}
+                        GROUP BY obj_id) t on s.obj_id = t.obj_id
+        set ${fieldName} = ${fieldName} + t.num
+        where s.obj_type = 6;
+    </update>
+
+    <update id="updateAttentionNum">
+        # 话题关注
+        update topic_act_stat s
+            left join (select obj_id, count(*) num
+                       FROM member_collect
+                       WHERE obj_type = 3
+                         and oper_type = 2
+                         and update_time &lt;= #{currentTime}
+                       GROUP BY obj_id) t on s.obj_id = t.obj_id
+        set s.focus_num = IFNULL(t.num, 0)
+        where s.obj_type = 3;
+
+        # 社团
+        update club_record r
+            left join (select obj_id, count(*) num
+                       FROM member_collect
+                       WHERE obj_type = 6
+                         and oper_type = 2
+                         and update_time &lt;= #{currentTime}
+                         and state = 1
+                       GROUP BY obj_id) t on r.club_id = t.obj_id
+        set r.fans_num = IFNULL(t.num, 0);
+    </update>
+
+    <update id="increaseAttentionNum">
+        # 话题关注
+        update topic_act_stat s
+            inner join (select obj_id, sum(state) num
+                        FROM member_collect
+                        WHERE obj_type = 3
+                          and oper_type = 2
+                          and offset &lt;&gt; 0
+                          and update_time &gt; #{startTime}
+                          and update_time &lt;= #{endTime}
+                        GROUP BY obj_id) t on s.obj_id = t.obj_id
+        set s.focus_num = s.focus_num + t.num
+        where s.obj_type = 3;
+
+        # 社团
+        update club_record r
+            inner join (select obj_id, sum(state) num
+                        FROM member_collect
+                        WHERE obj_type = 6
+                          and offset &lt;&gt; 0
+                          and oper_type = 2
+                          and update_time &gt; #{startTime}
+                          and update_time &lt;= #{endTime}
+                        GROUP BY obj_id) t on r.club_id = t.obj_id
+        set r.fans_num = r.fans_num + t.num;
+    </update>
+
+    <select id="selectMemberCollectVO" resultType="com.eshore.zswh.common.vo.member.MemberCollectVO">
+        select m.*, ${nameField}
+        from member_collect m
+                 inner join ${tableName} t on m.obj_id = t.id
+        where m.obj_type = #{objType}
+          and m.oper_type = #{operType}
+          and m.member_id = #{memberId}
+          and m.state = 1
+    </select>
+</mapper>
