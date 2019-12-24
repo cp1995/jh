@@ -17,7 +17,7 @@
     <context:property-placeholder location="classpath*:*.properties"/>
 
     <!-- 启动组件扫描 将Controller的注解排除掉，在spring-mvc.xml单独扫描Controller注解 -->
-    <context:component-scan base-package="com.eshore.zswh">
+    <context:component-scan base-package="com.cp.dd">
         <context:exclude-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
     </context:component-scan>
 
@@ -61,11 +61,11 @@
     <!--========== MyBatis 配置 ==============-->
     <!-- 配置 MapperScan -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.eshore.zswh.common.mapper"/>
+        <property name="basePackage" value="com.cp.dd.common.mapper"/>
     </bean>
 
     <!-- 调整 SqlSessionFactory 为 MyBatis-Plus 的 SqlSessionFactory -->
-    <bean id="sqlSessionFactory" class="com.eshore.zswh.common.support.custom.CustomMybatisSqlSessionFactoryBean">
+    <bean id="sqlSessionFactory" class="com.cp.dd.common.support.custom.CustomMybatisSqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
         <property name="mapperLocations" value="classpath*:mapper/**/*.xml"/>
         <property name="globalConfig" ref="globalConfig"/>
@@ -84,7 +84,7 @@
         </property>
         <property name="metaObjectHandler">
             <!-- 公共数据填充 -->
-            <bean class="com.eshore.zswh.web.handler.MyMetaObjectHandler"/>
+            <bean class="com.cp.dd.web.handler.MyMetaObjectHandler"/>
         </property>
     </bean>
 
@@ -97,11 +97,12 @@
 
     <!--========== 自定义要添加的组件 ==============-->
     <!-- 加入tokenUtil组件 -->
-    <bean id="tokenUtil" class="com.eshore.zswh.common.util.sys.TokenUtil"/>
+    <bean id="tokenUtil" class="com.cp.dd.common.util.sys.TokenUtil"/>
     <!-- 加入sysSmsCaptchaUtil短信验证码组件 -->
-    <bean id="sysSmsCaptchaUtil" class="com.eshore.zswh.common.util.sys.SysSmsCaptchaUtil"/>
+    <bean id="sysSmsCaptchaUtil" class="com.cp.dd.common.util.sys.SysSmsCaptchaUtil"/>
     <!-- 加入sysSmsCaptchaUtil短信验证码组件 -->
-    <bean id="wechatLoginUtil" class="com.eshore.zswh.common.util.WechatLoginUtil"/>
+
+
 
     <import resource="classpath:/conf/spring/applicationContext-redis.xml"/>
 </beans>

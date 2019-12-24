@@ -74,9 +74,9 @@
     </bean>
 
     <!-- 设置方法参数验证器 -->
-    <bean id="methodValidationPostProcessor"
+  <!--  <bean id="methodValidationPostProcessor"
           class="org.springframework.validation.beanvalidation.MethodValidationPostProcessor">
         <property name="validator" ref="validator"/>
-    </bean>
+    </bean>-->
 
 </beans>

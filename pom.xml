@@ -16,6 +16,7 @@
         <module>dd-common</module>
         <module>dd-web-service</module>
         <module>dd-web</module>
+        <module>dd-task</module>
     </modules>
 
 
