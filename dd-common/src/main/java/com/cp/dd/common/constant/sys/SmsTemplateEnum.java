@@ -6,7 +6,7 @@ import lombok.Getter;
 /**
  * 短信模板 枚举 (在sys_sms_template中新增模板后，要在此添加 编号和描述)
  *
- * @author zouxq
+ * @author chengp
  * @date 2019/10/25
  */
 @Getter

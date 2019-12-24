@@ -6,7 +6,7 @@ import lombok.Getter;
 /**
  * member.type 会员类型（ 1-个人用户, 2-企业用户）
  *
- * @author zouxq
+ * @author chengp
  * @date 2019/9/26
  */
 @Getter

@@ -6,7 +6,7 @@ import lombok.Getter;
 /**
  * 发送状态（0-未发送，1-发送成功，2-发送失败）
  *
- * @author zouxq
+ * @author chengp
  * @date 2019/10/25
  */
 @Getter

@@ -1,10 +1,10 @@
 package com.cp.dd.common.util.sys;
 
-import com.eshore.zswh.common.constant.member.SourceEnum;
-import com.eshore.zswh.common.util.json.FastJsonUtil;
-import com.eshore.zswh.common.util.security.AesEncryptUtil;
-import com.eshore.zswh.common.vo.member.MemberVO;
-import com.eshore.zswh.common.vo.sys.SysUserVO;
+import com.cp.dd.common.constant.member.SourceEnum;
+import com.cp.dd.common.util.json.FastJsonUtil;
+import com.cp.dd.common.util.security.AesEncryptUtil;
+import com.cp.dd.common.vo.member.MemberVO;
+import com.cp.dd.common.vo.sys.SysUserVO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
  * <p>
  * 要在web配置中将该组件加入bean管理，注入redisTemplate
  *
- * @author zouxq
+ * @author chengp
  */
 @Slf4j
 public class TokenUtil {

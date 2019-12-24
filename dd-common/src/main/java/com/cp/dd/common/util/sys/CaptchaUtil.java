@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
  * <p>
  * 使用 https://github.com/whvcse/EasyCaptcha
  *
- * @author zouxq
+ * @author chengp
  * @date 2019-09-24
  */
 public class CaptchaUtil {

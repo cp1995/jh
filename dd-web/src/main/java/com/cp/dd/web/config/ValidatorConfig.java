@@ -11,7 +11,7 @@ import javax.validation.ValidatorFactory;
 /**
  * Hibernate Validator 配置
  *
- * @author zouxq
+ * @author chengp
  * @date 2019/7/19
  */
 @Configuration

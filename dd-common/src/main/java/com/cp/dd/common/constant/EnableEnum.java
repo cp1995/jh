@@ -6,7 +6,7 @@ import lombok.Getter;
 /**
  * 状态（-1:删除,1:启用,0:禁用）
  *
- * @author zouxq
+ * @author chengp
  * @date 2019/9/26
  */
 @Getter

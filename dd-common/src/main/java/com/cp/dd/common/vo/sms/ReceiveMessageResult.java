@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 /**
  * 接收上行短信 接收对象
  *
- * @author zouxq
+ * @author chengp
  * @date 2019/10/25
  */
 @Data

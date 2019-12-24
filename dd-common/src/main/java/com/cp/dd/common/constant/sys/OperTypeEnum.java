@@ -6,7 +6,7 @@ import lombok.Getter;
 /**
  * 操作日志类型 枚举 sys_oper_log.type 0-其他，1-新增，2-修改，3-删除，4-审核
  *
- * @author zouxq
+ * @author chengp
  * @date 2019/10/25
  */
 @Getter

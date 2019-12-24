@@ -1,6 +1,6 @@
 package com.cp.dd.common.util;
 
-import com.eshore.zswh.common.constant.OrderSerialNumberEnum;
+import com.cp.dd.common.constant.OrderSerialNumberEnum;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import java.text.SimpleDateFormat;
@@ -9,7 +9,7 @@ import java.util.Date;
 /**
  * 单号生成器
  *
- * @author zouxq
+ * @author chengp
  * @date 2019/10/11
  */
 public class OrderSerialNumberGenerator {
@@ -20,7 +20,8 @@ public class OrderSerialNumberGenerator {
     /**
      * 生成订单号
      *
-     * @param prefix 前缀 {@link OrderSerialNumberEnum}
+     * @param prefix 前缀 {@link OrderSerialNumberEnum
+     * }
      * @param count  随机位数
      * @return 订单号
      */

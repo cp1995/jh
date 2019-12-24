@@ -1,5 +1,8 @@
 package com.cp.dd.common.util.security;
 
+
+
+
 import org.apache.commons.codec.binary.Base64;
 
 import javax.crypto.Cipher;
@@ -9,7 +12,7 @@ import javax.crypto.spec.SecretKeySpec;
 /**
  * AES 128bit 加密解密工具类
  *
- * @author zouxq
+ * @author chengp
  * @date 2019/10/17
  */
 public class AesEncryptUtil {

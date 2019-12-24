@@ -6,7 +6,7 @@ import lombok.Getter;
 /**
  * 团队用户 审核状态（1待审核，2 已审核，3审核不通过）
  *
- * @author zouxq
+ * @author chengp
  * @date 2019/9/26
  */
 @Getter

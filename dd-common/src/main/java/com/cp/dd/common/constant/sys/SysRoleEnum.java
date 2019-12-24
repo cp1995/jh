@@ -6,7 +6,7 @@ import lombok.Getter;
 /**
  * 系统角色 见表 sys_role
  *
- * @author zouxq
+ * @author chengp
  * @date 2019/11/14
  */
 @Getter

@@ -3,7 +3,7 @@ package com.cp.dd.common.constant.sys;
 /**
  * 系统配置表 key 的常量，见表 sys_config.key
  *
- * @author zouxq
+ * @author chengp
  * @date 2019/11/21
  */
 public enum SysConfigEnum {

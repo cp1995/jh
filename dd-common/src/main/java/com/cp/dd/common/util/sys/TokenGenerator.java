@@ -1,6 +1,7 @@
 package com.cp.dd.common.util.sys;
 
-import com.eshore.zswh.common.exception.ApiException;
+
+import com.baomidou.mybatisplus.extension.exceptions.ApiException;
 
 import java.security.MessageDigest;
 import java.util.UUID;
@@ -8,7 +9,7 @@ import java.util.UUID;
 /**
  * 自定义token生成器
  *
- * @author zouxq
+ * @author chengp
  */
 public class TokenGenerator {
 

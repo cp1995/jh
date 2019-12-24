@@ -3,7 +3,7 @@ package com.cp.dd.common.constant.sys;
 /**
  * 系统字典code常量
  *
- * @author zouxq
+ * @author chengp
  * @date 2019/9/26
  */
 public enum SysDictCodeConstant {

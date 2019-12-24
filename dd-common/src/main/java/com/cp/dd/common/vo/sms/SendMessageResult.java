@@ -5,7 +5,7 @@ import lombok.Data;
 /**
  * 短信发送对象 接收对象
  *
- * @author zouxq
+ * @author chengp
  * @date 2019/10/25
  */
 @Data

@@ -8,7 +8,7 @@ import lombok.Getter;
  * <p>
  * 有其他类型后续加
  *
- * @author zouxq
+ * @author chengp
  * @date 2019/7/12
  */
 @Getter

@@ -1,7 +1,7 @@
 package com.cp.dd.common.mapper.sys;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.eshore.zswh.common.entity.sys.SysSms;
+import com.cp.dd.common.entity.sys.SysSms;
 
 /**
  * <p>
