@@ -22,7 +22,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 @Configuration
 @EnableWebMvc
-@ComponentScan("com.eshore.zswh.web.controller")
+@ComponentScan("com.cp.dd.web.controller")
 public class Swagger2Config {
 
     @Value("${swagger.enable}")
