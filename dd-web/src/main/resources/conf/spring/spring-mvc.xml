@@ -13,17 +13,17 @@
     <mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/"/>
 
     <!-- 拦截器配置 -->
- <!--   <mvc:interceptors>
-        &lt;!&ndash; 跨域配置 &ndash;&gt;
+    <mvc:interceptors>
+        <!--&lt;!&ndash; 跨域配置 &ndash;&gt;-->
         <mvc:interceptor>
             <mvc:mapping path="/api/**"/>
-            <bean class="com.eshore.zswh.common.support.interceptor.WebCrosInterceptor"/>
+            <bean class="com.cp.dd.common.support.interceptor.WebCrosInterceptor"/>
         </mvc:interceptor>
         <mvc:interceptor>
             <mvc:mapping path="/api/**"/>
-            <bean class="com.eshore.zswh.web.interceptor.WebLoginInterceptor"/>
+            <bean class="com.cp.dd.web.interceptor.WebLoginInterceptor"/>
         </mvc:interceptor>
-    </mvc:interceptors>-->
+    </mvc:interceptors>
 
     <mvc:annotation-driven>
         <mvc:message-converters>
