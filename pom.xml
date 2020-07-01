@@ -63,7 +63,7 @@
         <dom4j.version>2.1.1</dom4j.version>
         <poi.verison>3.17</poi.verison>
         <bouncycastle.verison>1.46</bouncycastle.verison>
-        <quartz.version>2.3.1</quartz.version>
+        <quartz.version>2.3.2</quartz.version>
         <pinyin4j.version>2.5.0</pinyin4j.version>
         <codec.version>1.9</codec.version>
     </properties>
