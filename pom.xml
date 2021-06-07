@@ -49,7 +49,7 @@
         <hbase.client.version>0.96.1-hadoop2</hbase.client.version>
 
         <slf4j.version>1.7.7</slf4j.version>
-        <logback.version>1.1.2</logback.version>
+        <logback.version>1.2.0</logback.version>
         <log4jdbc.version>1.2</log4jdbc.version>
         <log4j.version>1.2.17</log4j.version>
         <jackson-databind.version>2.5.4</jackson-databind.version>
