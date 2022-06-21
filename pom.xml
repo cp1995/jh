@@ -39,7 +39,7 @@
         <spring.security.version>4.2.13.RELEASE</spring.security.version>
         <hibernate.validator.version>6.0.18.Final</hibernate.validator.version>
 
-        <mysql.version>5.1.48</mysql.version>
+        <mysql.version>8.0.28</mysql.version>
         <druid.version>1.1.20</druid.version>
         <mybatis.plus.version>3.1.0</mybatis.plus.version>
         <spring.data.redis.version>1.8.23.RELEASE</spring.data.redis.version>
