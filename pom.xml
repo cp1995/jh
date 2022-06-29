@@ -61,7 +61,7 @@
         <commons.httpclient.version>3.1</commons.httpclient.version>
         <commons.fileupload.version>1.3.1</commons.fileupload.version>
         <dom4j.version>2.1.1</dom4j.version>
-        <poi.verison>3.17</poi.verison>
+        <poi.verison>4.1.1</poi.verison>
         <bouncycastle.verison>1.46</bouncycastle.verison>
         <quartz.version>2.3.1</quartz.version>
         <pinyin4j.version>2.5.0</pinyin4j.version>
