@@ -35,7 +35,7 @@
         <springfox.swagger.version>2.9.2</springfox.swagger.version>
         <swagger.bootstrap.ui.version>1.9.4</swagger.bootstrap.ui.version>
 
-        <spring.version>4.3.25.RELEASE</spring.version>
+        <spring.version>5.2.20.RELEASE</spring.version>
         <spring.security.version>4.2.13.RELEASE</spring.security.version>
         <hibernate.validator.version>6.0.18.Final</hibernate.validator.version>
 
